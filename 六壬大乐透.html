@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<link rel="stylesheet" type="text/css" href="./style.css">
+	<title>六壬大乐透</title>
+</head>
+<body bgcolor="#C0C0C0">
+	<div style="border:none;position:relative;margin:0 auto;width: 500px;height: 1000px;">
+		<h1 align="center" style="color: red;">六壬大乐透生成器</h1>
+		<button id="GenerateBtn" type="button" class="btn">生成今天的大乐透号码</button>
+		<br><br><br><br><br><br>
+		<h1 id="ResultNumber" align="center"></h1>
+	</div>
+	<script type="text/javascript">
+	   	var generBtn = document.getElementById("GenerateBtn");
+	   	var headText = document.getElementById("ResultNumber");
+	   	var frontArray = new Array();
+		var backArray = new Array();
+
+	   	function isSuxi(curN) {
+	   		var myDate = new Date();
+	   		var h = myDate.getHours() * Math.floor(Math.random()*24);
+			var m = myDate.getMinutes() * Math.floor(Math.random()*60);
+			var result = (h + m + curN - 2) % 6;
+			var suxi = (result == 3);
+			if(suxi){
+				console.log(curN.toString() + "是速喜");
+			}
+	   		return suxi;
+	   	}
+
+	   	function isFrontExists(curR) {
+	   		var exists = false;
+	   		for(var i = 0; i < frontArray.length; i++) {
+				if(frontArray[i] == curR)
+					exists = true;
+			}
+			return exists;
+	   	}
+
+	   	function isBackExists(curR) {
+	   		var exists = false;
+	   		for(var i = 0; i < backArray.length; i++) {
+				if(backArray[i] == curR)
+					exists = true;
+			}
+			return exists;
+	   	}
+
+		generBtn.onclick = function () {
+			console.log("生成今天的中奖号码");
+			var frontCount = 5;
+			var backCount = 2;
+			frontArray = new Array();
+			backArray = new Array();
+
+			while(frontCount > 0 || backCount > 0) {
+				if(frontCount > 0) {
+					var curR = Math.floor(Math.random()*35) + 1;
+					var suxi = isSuxi(curR);
+					while(isFrontExists(curR) || !suxi){
+						curR = Math.floor(Math.random()*35) + 1;
+						suxi = isSuxi(curR);
+					}
+					frontArray[frontArray.length] = curR;
+					frontCount--;
+				} else if(backCount > 0) {
+					var curR = Math.floor(Math.random()*12) + 1;
+					var suxi = isSuxi(curR);
+					while(isBackExists(curR) || !suxi){
+						curR = Math.floor(Math.random()*12) + 1;
+						suxi = isSuxi(curR);
+					}
+					backArray[backArray.length] = curR;
+					backCount--;
+				}
+			}
+
+			var result = '';
+			let frontResult = frontArray.sort(function (a, b) {
+			    return a - b; // 升序排列 
+			    // return b - a; // 降序排列 
+			});
+			let backResult = backArray.sort(function (a, b) {
+			    return a - b; // 升序排列 
+			    // return b - a; // 降序排列 
+			});
+			for(var i = 0; i < frontResult.length; i++) {
+				result += (frontResult[i].toString() + " ");
+			}
+			result += '<span style="color:red;">';
+			for(var i = 0; i < backResult.length; i++) {
+				result += (backResult[i].toString() + " ");
+			}
+			result += '</span>';
+
+			headText.innerHTML=result;
+		};
+		</script>
+</body>
+</html>
